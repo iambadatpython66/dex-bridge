@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AppSettings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <DesktopMode>false</DesktopMode>
+  <Resolution>2560x1440</Resolution>
+  <FrameRate>60</FrameRate>
+  <Fullscreen>true</Fullscreen>
+  <Audio>true</Audio>
+  <Clipboard>true</Clipboard>
+  <PhysicalKeyboard>true</PhysicalKeyboard>
+  <ToolsDirectory />
+</AppSettings>
