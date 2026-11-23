@@ -1,0 +1,12 @@
+bin/
+obj/
+build-cache/
+dist/
+Data/
+*.log
+*.zip
+.impeccable/review/
+.impeccable/mocks/
+.impeccable/questions/
+.impeccable/config.local.json
+.android/

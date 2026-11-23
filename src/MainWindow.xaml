@@ -1,0 +1,173 @@
+<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="DeX Bridge" Width="1100" Height="790" MinWidth="900" MinHeight="640"
+        WindowStartupLocation="CenterScreen" Background="#FFFFFF" FontFamily="Segoe UI"
+        FontSize="14" Foreground="#182C32" UseLayoutRounding="True">
+  <Window.Resources>
+    <SolidColorBrush x:Key="Ink" Color="#182C32"/>
+    <SolidColorBrush x:Key="Muted" Color="#50666C"/>
+    <SolidColorBrush x:Key="Accent" Color="#006C67"/>
+    <SolidColorBrush x:Key="Rule" Color="#D8E1E2"/>
+    <Style TargetType="TextBlock"><Setter Property="TextWrapping" Value="Wrap"/></Style>
+    <Style TargetType="Button">
+      <Setter Property="Padding" Value="16,10"/><Setter Property="MinHeight" Value="40"/>
+      <Setter Property="Background" Value="#F0F4F4"/><Setter Property="Foreground" Value="{StaticResource Ink}"/>
+      <Setter Property="BorderThickness" Value="0"/><Setter Property="Cursor" Value="Hand"/>
+      <Setter Property="Template">
+        <Setter.Value><ControlTemplate TargetType="Button">
+          <Border x:Name="Surface" Background="{TemplateBinding Background}" CornerRadius="6" Padding="{TemplateBinding Padding}">
+            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" RecognizesAccessKey="True"/>
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True"><Setter TargetName="Surface" Property="Opacity" Value="0.85"/></Trigger>
+            <Trigger Property="IsPressed" Value="True"><Setter TargetName="Surface" Property="Opacity" Value="0.7"/></Trigger>
+            <Trigger Property="IsKeyboardFocused" Value="True"><Setter TargetName="Surface" Property="BorderBrush" Value="#182C32"/><Setter TargetName="Surface" Property="BorderThickness" Value="2"/></Trigger>
+            <Trigger Property="IsEnabled" Value="False"><Setter TargetName="Surface" Property="Background" Value="#E4EAEA"/><Setter Property="Foreground" Value="#5B6C71"/><Setter Property="Cursor" Value="Arrow"/></Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate></Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+      <Setter Property="Background" Value="{StaticResource Accent}"/>
+      <Setter Property="Foreground" Value="White"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+    <Style TargetType="ComboBox"><Setter Property="MinHeight" Value="36"/><Setter Property="Padding" Value="8,4"/><Setter Property="VerticalContentAlignment" Value="Center"/></Style>
+    <Style TargetType="CheckBox"><Setter Property="Margin" Value="0,0,0,13"/><Setter Property="VerticalContentAlignment" Value="Center"/></Style>
+    <Style TargetType="RadioButton"><Setter Property="VerticalContentAlignment" Value="Center"/><Setter Property="Margin" Value="0,0,22,0"/></Style>
+    <Style TargetType="TabItem"><Setter Property="Padding" Value="18,10"/><Setter Property="FontSize" Value="14"/></Style>
+  </Window.Resources>
+  <Grid Background="#FFFFFF">
+    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+    <Grid Margin="32,24,32,20">
+      <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+      <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+        <Viewbox Width="32" Height="32" Margin="0,0,12,0">
+          <Canvas Width="32" Height="32">
+            <Path Data="M 4,4 L 12,4 L 12,25 L 4,25 Z M 7,21 L 9,21 M 17,8 L 30,8 L 30,22 L 17,22 Z M 23,22 L 23,27 M 19,27 L 27,27 M 12,14 L 17,14" Stroke="#006C67" StrokeThickness="2" StrokeLineJoin="Round"/>
+          </Canvas>
+        </Viewbox>
+        <TextBlock Text="DeX Bridge" FontSize="23" FontWeight="SemiBold" VerticalAlignment="Center"/>
+      </StackPanel>
+      <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+        <Ellipse x:Name="StatusDot" Width="8" Height="8" Fill="#667A80" Margin="0,0,8,0"/>
+        <TextBlock x:Name="HeaderStatus" Text="Waiting for USB" Foreground="{StaticResource Muted}" VerticalAlignment="Center"/>
+      </StackPanel>
+    </Grid>
+    <TabControl x:Name="Tabs" Grid.Row="1" Margin="24,0,24,0" BorderThickness="0" Background="White">
+      <TabItem Header="_Connection">
+        <Grid>
+          <Grid.RowDefinitions><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+          <Grid Margin="8,26,8,20">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="30"/><ColumnDefinition Width="305"/></Grid.ColumnDefinitions>
+            <StackPanel>
+              <TextBlock Text="Connect your Android" FontSize="28" FontWeight="SemiBold" Margin="0,0,0,8"/>
+              <TextBlock Text="One USB cable. Your phone, with room to work." Foreground="{StaticResource Muted}" Margin="0,0,0,25"/>
+              <Border x:Name="StateSurface" Background="#EDF3F3" Padding="18" CornerRadius="8" Margin="0,0,0,20">
+                <StackPanel>
+                  <TextBlock x:Name="StateTitle" Text="Plug in your phone" FontWeight="SemiBold" FontSize="16" Margin="0,0,0,5"/>
+                  <TextBlock x:Name="StateDetail" Text="Connect a USB data cable, unlock your phone, and allow USB debugging when prompted." Foreground="{StaticResource Muted}"/>
+                </StackPanel>
+              </Border>
+              <TextBlock Text="USB phone" FontWeight="SemiBold" Margin="0,0,0,8"/>
+              <Grid>
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="12"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                <ComboBox x:Name="Devices" DisplayMemberPath="DisplayName" AutomationProperties.Name="USB phone" ToolTip="Only phones connected by USB are shown"/>
+                <Button x:Name="RefreshButton" Grid.Column="2" Content="_Refresh" Padding="13,8"/>
+              </Grid>
+              <TextBlock x:Name="PhoneDetails" Text="No authorized USB phone detected" FontSize="12" Foreground="{StaticResource Muted}" Margin="0,8,0,23"/>
+              <StackPanel x:Name="SessionOptions">
+                <TextBlock Text="Open as" FontWeight="SemiBold" Margin="0,0,0,10"/>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                  <RadioButton x:Name="AutoMode" GroupName="Mode" Content="Auto" IsChecked="True" AutomationProperties.Name="Automatic compatibility mode"/>
+                  <RadioButton x:Name="DesktopMode" GroupName="Mode" Content="DeX / desktop" AutomationProperties.Name="Virtual desktop mode"/>
+                  <RadioButton x:Name="PhoneMode" GroupName="Mode" Content="Phone screen" AutomationProperties.Name="Phone screen mode"/>
+                </StackPanel>
+                <TextBlock x:Name="ModeHelp" Text="Auto picks a compatible mode for your phone and falls back to mirroring if a desktop cannot start." FontSize="12" Foreground="{StaticResource Muted}" Margin="0,0,0,22"/>
+                <Grid Margin="0,0,0,20">
+                  <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="18"/><ColumnDefinition Width="145"/></Grid.ColumnDefinitions>
+                  <StackPanel><TextBlock Text="Display resolution" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                    <ComboBox x:Name="Resolution" AutomationProperties.Name="Display resolution" SelectedIndex="1">
+                      <ComboBoxItem Content="1280 × 720" Tag="1280x720"/><ComboBoxItem Content="1920 × 1080" Tag="1920x1080"/><ComboBoxItem Content="2560 × 1440" Tag="2560x1440"/>
+                    </ComboBox>
+                  </StackPanel>
+                  <StackPanel Grid.Column="2"><TextBlock Text="Frame rate limit" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                    <ComboBox x:Name="FrameRate" AutomationProperties.Name="Frame rate limit" SelectedIndex="1"><ComboBoxItem Content="30 fps" Tag="30"/><ComboBoxItem Content="60 fps" Tag="60"/></ComboBox>
+                  </StackPanel>
+                </Grid>
+                <Grid>
+                  <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                  <StackPanel><CheckBox x:Name="Fullscreen" Content="Open fullscreen" IsChecked="True"/><CheckBox x:Name="Audio" Content="Play phone audio" IsChecked="True"/></StackPanel>
+                  <StackPanel Grid.Column="1"><CheckBox x:Name="Clipboard" Content="Share clipboard" IsChecked="True"/><CheckBox x:Name="Keyboard" Content="Physical keyboard mode" IsChecked="True" ToolTip="Supports your phone's configured keyboard language. Turn off if keyboard input fails."/></StackPanel>
+                </Grid>
+              </StackPanel>
+            </StackPanel>
+            <Border Grid.Column="2" Background="#F5F7F7" Padding="23" CornerRadius="8" VerticalAlignment="Top">
+              <StackPanel>
+                <TextBlock Text="First connection" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,22"/>
+                <TextBlock Text="1. Enable developer options" FontWeight="SemiBold" Margin="0,0,0,7"/>
+                <TextBlock Text="Open About phone and find Build number, sometimes inside Software information. Tap it seven times." Foreground="{StaticResource Muted}" FontSize="13" Margin="0,0,0,20"/>
+                <TextBlock Text="2. Turn on USB debugging" FontWeight="SemiBold" Margin="0,0,0,7"/>
+                <TextBlock Text="Find Developer options in Settings and enable USB debugging. Some brands also require a separate USB debugging security option for keyboard and mouse." Foreground="{StaticResource Muted}" FontSize="13" Margin="0,0,0,20"/>
+                <TextBlock Text="3. Connect and allow" FontWeight="SemiBold" Margin="0,0,0,7"/>
+                <TextBlock Text="Use a USB data cable. Unlock your phone and tap Allow on the debugging prompt." Foreground="{StaticResource Muted}" FontSize="13" Margin="0,0,0,22"/>
+                <Border BorderBrush="{StaticResource Rule}" BorderThickness="0,1,0,0" Padding="0,18,0,0">
+                  <StackPanel><TextBlock Text="About your desktop" FontWeight="SemiBold" Margin="0,0,0,7"/>
+                    <TextBlock Text="Phone mirroring supports Android 5+. DeX needs compatible Samsung firmware. Auto tries a desktop on One UI 8+ and returns to mirroring if it fails or stays blank. Audio needs Android 11+." Foreground="{StaticResource Muted}" FontSize="13"/>
+                  </StackPanel>
+                </Border>
+              </StackPanel>
+            </Border>
+          </Grid>
+        </ScrollViewer>
+        <Grid Grid.Row="1" Margin="8,12,8,18">
+          <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="30"/><ColumnDefinition Width="305"/></Grid.ColumnDefinitions>
+          <StackPanel Orientation="Horizontal">
+            <Button x:Name="ConnectButton" Content="_Open desktop" Style="{StaticResource PrimaryButton}" MinWidth="185" IsEnabled="False"/>
+            <Button x:Name="FocusButton" Content="_Show display" Margin="12,0,0,0" Visibility="Collapsed"/>
+          </StackPanel>
+          <TextBlock x:Name="SessionHint" Grid.Column="2" Text="F11 exits fullscreen.&#10;Alt + Q closes the display." FontSize="12" Foreground="{StaticResource Muted}" VerticalAlignment="Center"/>
+        </Grid>
+        </Grid>
+      </TabItem>
+      <TabItem Header="_Help">
+        <ScrollViewer VerticalScrollBarVisibility="Auto"><StackPanel Margin="8,26,25,25" MaxWidth="790" HorizontalAlignment="Left">
+          <TextBlock Text="Get connected" FontSize="28" FontWeight="SemiBold" Margin="0,0,0,24"/>
+          <TextBlock Text="The phone does not appear" FontSize="17" FontWeight="SemiBold" Margin="0,0,0,8"/>
+          <TextBlock Text="Try another USB data cable or laptop port. Unlock the phone and select Transferring files from its USB notification if needed. Enable USB debugging in Developer options. If Windows cannot detect the phone, install its manufacturer's USB driver and reconnect." Foreground="{StaticResource Muted}" Margin="0,0,0,12"/>
+          <Button x:Name="DriverButton" Content="Open Android USB driver help" HorizontalAlignment="Left" Margin="0,0,0,24"/>
+          <TextBlock Text="Waiting for permission" FontSize="17" FontWeight="SemiBold" Margin="0,0,0,8"/>
+          <TextBlock Text="Unlock your phone and tap Allow on the USB debugging prompt. If no prompt appears, revoke USB debugging authorizations in Developer options, then disconnect and reconnect the cable. Your phone may restrict debugging while Samsung Auto Blocker is enabled; review that setting on the phone if authorization is blocked." Foreground="{StaticResource Muted}" Margin="0,0,0,24"/>
+          <TextBlock Text="The desktop is blank or is not DeX" FontSize="17" FontWeight="SemiBold" Margin="0,0,0,8"/>
+          <TextBlock Text="Use Auto to fall back to mirroring if the desktop fails or produces no video frame for 12 seconds. A running video stream does not prove that DeX is available. If the desktop shows an unusable launcher, close it and choose Phone screen. Virtual desktop requires Android 10+, and the phone's firmware decides which launcher is available." Foreground="{StaticResource Muted}" Margin="0,0,0,24"/>
+          <TextBlock Text="Keyboard, mouse, and display controls" FontSize="17" FontWeight="SemiBold" Margin="0,0,0,8"/>
+          <TextBlock Text="F11 toggles fullscreen. Alt + Q closes the display. Alt + H sends Home and Alt + B sends Back. Alt + K opens physical keyboard settings on the phone. Ctrl + C and Ctrl + V work with compatible apps when Share clipboard is enabled. Desktop mode forwards right-click to the phone; Shift + right-click sends Back. If typing fails, turn off Physical keyboard mode and reconnect." Foreground="{StaticResource Muted}" Margin="0,0,0,24"/>
+          <TextBlock Text="Audio or video is unreliable" FontSize="17" FontWeight="SemiBold" Margin="0,0,0,8"/>
+          <TextBlock Text="Audio is automatically disabled below Android 11. Android 5–9 uses basic keyboard input, a maximum 1280-pixel mirrored size, and a 30 fps limit. For newer phones, try a lower resolution or turn off audio if capture fails. Protected media may appear black. The frame rate setting is a limit, not a performance guarantee." Foreground="{StaticResource Muted}" Margin="0,0,0,24"/>
+          <TextBlock Text="After you finish" FontSize="17" FontWeight="SemiBold" Margin="0,0,0,8"/>
+          <TextBlock Text="Close the display before unplugging. The virtual display is removed when the session ends. You can turn USB debugging off in Developer options when you no longer need it." Foreground="{StaticResource Muted}"/>
+        </StackPanel></ScrollViewer>
+      </TabItem>
+      <TabItem Header="_Diagnostics">
+        <Grid Margin="8,26,8,20">
+          <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+          <TextBlock Text="Connection diagnostics" FontSize="28" FontWeight="SemiBold" Margin="0,0,0,10"/>
+          <TextBlock x:Name="ToolsStatus" Grid.Row="1" Foreground="{StaticResource Muted}" Margin="0,0,0,14"/>
+          <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,0,0,14">
+            <Button x:Name="ChooseToolsButton" Content="Choose scrcpy.exe…"/>
+            <Button x:Name="ExportButton" Content="Save diagnostic log…" Margin="12,0,0,0"/>
+          </StackPanel>
+          <TextBox x:Name="LogText" Grid.Row="3" IsReadOnly="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" FontFamily="Consolas" FontSize="12" Background="#F5F7F7" BorderBrush="{StaticResource Rule}" Padding="14" AutomationProperties.Name="Connection diagnostic log"/>
+          <TextBlock Grid.Row="4" Text="Independent app powered by scrcpy 5.0.1. No Samsung account, subscription, or cloud service required." FontSize="12" Foreground="{StaticResource Muted}" Margin="0,12,0,0"/>
+        </Grid>
+      </TabItem>
+    </TabControl>
+    <Border Grid.Row="2" BorderBrush="{StaticResource Rule}" BorderThickness="0,1,0,0" Margin="32,0" Padding="0,13">
+      <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+        <TextBlock Text="USB connection · Keyboard and mouse · Independent desktop display" FontSize="12" Foreground="{StaticResource Muted}"/>
+        <TextBlock Grid.Column="1" Text="Windows · v1.1" FontSize="12" Foreground="{StaticResource Muted}" Margin="18,0,0,0"/>
+      </Grid>
+    </Border>
+  </Grid>
+</Window>
